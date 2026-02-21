@@ -10,18 +10,34 @@ export const Hero: React.FC = () => {
   const parallaxContentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Optimized Desktop Parallax Logic
+    // Definitive Desktop Parallax Logic
     let ticking = false;
+
+    // Initial position to avoid jumps
+    if (parallaxBgRef.current) parallaxBgRef.current.style.transform = 'translate3d(0, 0, 0) scale(1.2)';
+    if (parallaxContentRef.current) parallaxContentRef.current.style.transform = 'translate3d(0, 0, 0)';
+
     const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          if (window.innerWidth >= 1024) {
-            const scrolled = window.scrollY;
+          const section = containerRef.current;
+          if (!section) return;
+
+          // Only run on non-tiny screens
+          if (window.innerWidth >= 768) {
+            const rect = section.getBoundingClientRect();
+            const scrolledPercentage = Math.max(0, -rect.top / rect.height);
+
+            // Move background down as we scroll (0.4 coefficient for "deep" depth)
             if (parallaxBgRef.current) {
-              parallaxBgRef.current.style.transform = `translate3d(0, ${scrolled * 0.25}px, 0) scale(1.1)`;
+              const y = scrolledPercentage * 400; // Background moves down
+              parallaxBgRef.current.style.transform = `translate3d(0, ${y}px, 0) scale(1.2)`;
             }
+
+            // Move content up slightly as we scroll (-0.15 coefficient for layering)
             if (parallaxContentRef.current) {
-              parallaxContentRef.current.style.transform = `translate3d(0, ${scrolled * -0.12}px, 0)`;
+              const y = scrolledPercentage * -150; // Content moves up
+              parallaxContentRef.current.style.transform = `translate3d(0, ${y}px, 0)`;
             }
           }
           ticking = false;
@@ -31,6 +47,9 @@ export const Hero: React.FC = () => {
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
+    // Run once on load
+    handleScroll();
+
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -156,10 +175,14 @@ export const Hero: React.FC = () => {
   };
 
   return (
-    <section ref={containerRef} className="relative min-h-screen flex flex-col justify-center items-center pt-24 pb-12 overflow-hidden bg-black selection:bg-white/30">
+    <section ref={containerRef} className="relative min-h-[110vh] flex flex-col justify-center items-center pt-24 pb-12 overflow-hidden bg-black selection:bg-white/30">
 
       {/* Background Asset - Modern Silver/Dark Metallic CSS */}
-      <div ref={parallaxBgRef} className="absolute inset-0 z-0 bg-zinc-950 pointer-events-none will-change-transform" style={{ transform: 'scale(1.1)' }}>
+      <div
+        ref={parallaxBgRef}
+        className="absolute inset-0 z-0 bg-zinc-950 pointer-events-none will-change-transform"
+        style={{ transform: 'translate3d(0,0,0) scale(1.2)' }}
+      >
 
         {/* Base Darkness Layers */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#000000,#1a1a1a,#000000)] opacity-100"></div>
