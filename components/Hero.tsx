@@ -10,29 +10,37 @@ export const Hero: React.FC = () => {
   const parallaxContentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Definitive Parallax Implementation
+    // Aggressive Parallax Implementation - High Visibility
     let ticking = false;
-
     const bg = parallaxBgRef.current;
     const content = parallaxContentRef.current;
 
-    // Safety check for mount
-    if (bg) bg.style.transform = 'translate3d(0,0,0) scale(1.5)';
-    if (content) content.style.transform = 'translate3d(0,0,0)';
+    // Reset any CSS transitions that might fight JS transforms
+    if (bg) {
+      bg.style.transition = 'none';
+      bg.style.willChange = 'transform';
+      bg.style.transform = 'translate3d(0,0,0) scale(2.0)'; // Massive scale for absolute safety
+    }
+    if (content) {
+      content.style.transition = 'none';
+      content.style.willChange = 'transform';
+      content.style.transform = 'translate3d(0,0,0)';
+    }
 
     const onScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
           const scrolled = window.scrollY;
-          // Performance: only run if the hero is visible (approx first 1000px)
-          if (scrolled < 1200 && window.innerWidth >= 768) {
+
+          // Direct, unmistakable movement factors
+          if (window.innerWidth >= 992) { // Target Laptops and Desktops
             if (bg) {
-              // Background moves down relative to scroll speed (0.5 factor)
-              bg.style.transform = `translate3d(0, ${scrolled * 0.5}px, 0) scale(1.5)`;
+              // Background moves DOWN significantly
+              bg.style.transform = `translate3d(0, ${scrolled * 0.6}px, 0) scale(2.0)`;
             }
             if (content) {
-              // Content moves up slightly (-0.15 factor)
-              content.style.transform = `translate3d(0, ${scrolled * -0.15}px, 0)`;
+              // Content moves UP significantly
+              content.style.transform = `translate3d(0, ${scrolled * -0.3}px, 0)`;
             }
           }
           ticking = false;
@@ -177,7 +185,7 @@ export const Hero: React.FC = () => {
       <div
         ref={parallaxBgRef}
         className="absolute inset-0 z-0 bg-zinc-950 pointer-events-none"
-        style={{ transform: 'translate3d(0,0,0) scale(1.5)', willChange: 'transform' }}
+        style={{ transform: 'translate3d(0,0,0) scale(2.0)', backfaceVisibility: 'hidden' }}
       >
 
         {/* Base Darkness Layers */}
@@ -204,7 +212,11 @@ export const Hero: React.FC = () => {
 
       <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 pointer-events-none z-0"></div>
 
-      <div ref={parallaxContentRef} className="container mx-auto px-4 z-30 relative text-center will-change-transform">
+      <div
+        ref={parallaxContentRef}
+        className="container mx-auto px-4 z-30 relative text-center"
+        style={{ backfaceVisibility: 'hidden' }}
+      >
 
         <div className="mb-8 flex justify-center">
           {!imageError ? (
