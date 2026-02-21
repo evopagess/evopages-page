@@ -10,16 +10,23 @@ export const Hero: React.FC = () => {
   const parallaxContentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Desktop Parallax Logic
+    // Optimized Desktop Parallax Logic
+    let ticking = false;
     const handleScroll = () => {
-      if (window.innerWidth < 1024) return;
-
-      const scrolled = window.scrollY;
-      if (parallaxBgRef.current) {
-        parallaxBgRef.current.style.transform = `translateY(${scrolled * 0.3}px)`;
-      }
-      if (parallaxContentRef.current) {
-        parallaxContentRef.current.style.transform = `translateY(${scrolled * -0.1}px)`;
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          if (window.innerWidth >= 1024) {
+            const scrolled = window.scrollY;
+            if (parallaxBgRef.current) {
+              parallaxBgRef.current.style.transform = `translate3d(0, ${scrolled * 0.25}px, 0) scale(1.1)`;
+            }
+            if (parallaxContentRef.current) {
+              parallaxContentRef.current.style.transform = `translate3d(0, ${scrolled * -0.12}px, 0)`;
+            }
+          }
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 
@@ -152,7 +159,7 @@ export const Hero: React.FC = () => {
     <section ref={containerRef} className="relative min-h-screen flex flex-col justify-center items-center pt-24 pb-12 overflow-hidden bg-black selection:bg-white/30">
 
       {/* Background Asset - Modern Silver/Dark Metallic CSS */}
-      <div ref={parallaxBgRef} className="absolute inset-0 z-0 bg-zinc-950 pointer-events-none transform-gpu">
+      <div ref={parallaxBgRef} className="absolute inset-0 z-0 bg-zinc-950 pointer-events-none will-change-transform" style={{ transform: 'scale(1.1)' }}>
 
         {/* Base Darkness Layers */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#000000,#1a1a1a,#000000)] opacity-100"></div>
@@ -178,7 +185,7 @@ export const Hero: React.FC = () => {
 
       <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 pointer-events-none z-0"></div>
 
-      <div ref={parallaxContentRef} className="container mx-auto px-4 z-30 relative text-center">
+      <div ref={parallaxContentRef} className="container mx-auto px-4 z-30 relative text-center will-change-transform">
 
         <div className="mb-8 flex justify-center">
           {!imageError ? (
