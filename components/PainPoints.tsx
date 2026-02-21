@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import { Clock, Activity, Ban } from 'lucide-react';
 import { SpotlightCard } from './SpotlightCard';
 
@@ -23,32 +22,26 @@ export const PainPoints: React.FC = () => {
   ];
 
   return (
-    <section className="py-20 md:py-32 relative overflow-hidden">
+    <section className="py-20 md:py-32 relative overflow-hidden" style={{ contentVisibility: 'auto', containIntrinsicSize: '600px' }}>
       {/* Background Glow - Reverted to Red */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-red-900/10 rounded-full blur-[120px] pointer-events-none"></div>
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-12 md:mb-20">
-          <motion.h2
-            initial={{ opacity: 0, y: 40, scale: 0.95 }}
-            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="text-3xl md:text-6xl font-bold mb-6"
+          <h2
+            className="text-3xl md:text-6xl font-bold mb-6 reveal active"
           >
             O <span className="font-serif italic font-normal text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">Custo</span> do <span className="font-serif italic font-normal text-zinc-600 line-through decoration-red-900/50 decoration-2">Amadorismo</span>
-          </motion.h2>
+          </h2>
           <p className="text-xl text-zinc-400 font-light">Onde seu dinheiro está escorrendo pelo ralo hoje:</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {pains.map((pain, index) => (
-            <motion.div
+            <div
               key={index}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ delay: index * 0.2, duration: 0.6, ease: "easeOut" }}
+              className="reveal active"
+              style={{ transitionDelay: `${index * 100}ms` }}
             >
               <SpotlightCard
                 className="p-8 md:p-10 h-full hover:border-red-500/40 transition-colors duration-500 group bg-zinc-900/20"
@@ -62,7 +55,7 @@ export const PainPoints: React.FC = () => {
                   {pain.description}
                 </p>
               </SpotlightCard>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

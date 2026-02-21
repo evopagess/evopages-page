@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import { Zap, Smartphone, Crown, Users } from 'lucide-react';
 import { SpotlightCard } from './SpotlightCard';
 
@@ -35,29 +34,22 @@ export const Solution: React.FC = () => {
     <section id="solution" className="py-20 md:py-32 border-t border-white/5 relative overflow-hidden">
       <div className="container mx-auto px-4 relative z-10">
         <div className="flex flex-col md:flex-row justify-between items-end mb-12 md:mb-20 gap-8">
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="md:w-2/3"
+          <div
+            className="md:w-2/3 reveal active"
           >
             <h2 className="text-3xl md:text-5xl font-medium tracking-tight leading-tight">
               Nós não apenas "fazemos sites". <br />
               <span className="font-serif italic text-silver drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">Nós construímos ativos de venda:</span>
             </h2>
-          </motion.div>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {items.map((item, i) => (
-            <motion.div
+            <div
               key={i}
-              initial={{ opacity: 0, y: 40, scale: 0.95 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ delay: i * 0.15, duration: 0.6, ease: "easeOut" }}
-              className={`${item.colSpan}`}
+              className={`${item.colSpan} reveal active`}
+              style={{ transitionDelay: `${i * 100}ms` }}
             >
               <SpotlightCard className="h-full p-6 md:p-8 flex flex-col justify-between min-h-[200px] md:min-h-[220px] group hover:bg-white/5 transition-colors border border-white/5 hover:border-white/20 hover:shadow-[0_0_30px_-10px_rgba(255,255,255,0.1)]">
                 <div className="flex justify-between items-start mb-6">
@@ -71,7 +63,7 @@ export const Solution: React.FC = () => {
                   <p className="text-zinc-400 text-sm font-light leading-relaxed">{item.text}</p>
                 </div>
               </SpotlightCard>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

@@ -27,7 +27,7 @@ export const Portfolio: React.FC = () => {
   ];
 
   return (
-    <section id="portfolio" className="py-24 bg-zinc-950 relative border-t border-white/5">
+    <section id="portfolio" className="py-24 bg-zinc-950 relative border-t border-white/5" style={{ contentVisibility: 'auto', containIntrinsicSize: '800px' }}>
       {/* Background Grid Pattern */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none"></div>
 

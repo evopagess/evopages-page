@@ -1,19 +1,9 @@
 import React, { useRef, useEffect } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
 import { Button } from './Button';
 
 export const Hero: React.FC = () => {
   const [imageError, setImageError] = React.useState(false);
   const containerRef = useRef<HTMLElement>(null);
-
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end start"]
-  });
-
-  const yBg = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
-  const yText = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
-  const opacityText = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -142,7 +132,7 @@ export const Hero: React.FC = () => {
     <section ref={containerRef} className="relative min-h-screen flex flex-col justify-center items-center pt-24 pb-12 overflow-hidden bg-black selection:bg-white/30">
 
       {/* Background Asset - Modern Silver/Dark Metallic CSS */}
-      <motion.div style={{ y: yBg }} className="absolute inset-0 z-0 bg-zinc-950 pointer-events-none transform-gpu">
+      <div className="absolute inset-0 z-0 bg-zinc-950 pointer-events-none transform-gpu">
 
         {/* Base Darkness Layers */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#000000,#1a1a1a,#000000)] opacity-100"></div>
@@ -164,18 +154,13 @@ export const Hero: React.FC = () => {
 
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black z-20"></div>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_#000000_100%)] opacity-80 z-20"></div>
-      </motion.div>
+      </div>
 
       <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 pointer-events-none z-0"></div>
 
-      <motion.div style={{ y: yText, opacity: opacityText }} className="container mx-auto px-4 z-30 relative text-center">
+      <div className="container mx-auto px-4 z-30 relative text-center">
 
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="mb-8 flex justify-center"
-        >
+        <div className="mb-8 flex justify-center">
           {!imageError ? (
             <img
               src="https://drive.google.com/thumbnail?id=1p7YctWDr0zL4ZbCDKixFXlys9HO63tgw&sz=w1000"
@@ -188,51 +173,34 @@ export const Hero: React.FC = () => {
               loading="eager" // Critical LCP element
             />
           ) : (
-            <span className="inline-block py-1 px-3 rounded-full bg-zinc-900 border border-white/10 text-zinc-400 text-xs font-bold tracking-[0.2em] uppercase">
-              EVO - Design & Performance
-            </span>
+            <div className="reveal active delay-200">
+              <span className="inline-block py-1 px-3 rounded-full bg-zinc-900 border border-white/10 text-zinc-400 text-xs font-bold tracking-[0.2em] uppercase">
+                EVO - Design & Performance
+              </span>
+            </div>
           )}
-        </motion.div>
+        </div>
 
-        <motion.h1
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-          className="text-3xl md:text-6xl lg:text-7xl font-medium tracking-tight mb-8 text-white max-w-5xl mx-auto leading-[1.1] transform-gpu shadow-black/50 text-shadow-sm"
-        >
+        <h1 className="reveal active delay-300 text-3xl md:text-6xl lg:text-7xl font-medium tracking-tight mb-8 text-white max-w-5xl mx-auto leading-[1.1] transform-gpu shadow-black/50 text-shadow-sm">
           Sua página de vendas com <br className="hidden md:block" />
           <span className="font-serif italic font-light text-silver opacity-90">design de alto padrão</span> <br className="hidden md:block" />
           e carregamento instantâneo.
-        </motion.h1>
+        </h1>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 0.6 }}
-          className="h-px w-24 bg-gradient-to-r from-transparent via-zinc-500 to-transparent mx-auto mb-8"
-        ></motion.div>
+        <div className="reveal active delay-500 h-px w-24 bg-gradient-to-r from-transparent via-zinc-500 to-transparent mx-auto mb-8"></div>
 
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.8 }}
-          className="text-base md:text-lg text-zinc-400 max-w-3xl mx-auto mb-12 font-light leading-relaxed tracking-wide py-2 rounded-lg bg-black/40 px-4 transform-gpu"
-        >
+        <p className="reveal active delay-700 text-base md:text-lg text-zinc-400 max-w-3xl mx-auto mb-12 font-light leading-relaxed tracking-wide py-2 rounded-lg bg-black/40 px-4 transform-gpu">
           Paramos de perder seu dinheiro com sites lentos e amadores que espantam seus clientes.
           Criamos a estrutura técnica para você escalar seu infoproduto com <span className="text-zinc-200 font-medium">autoridade</span>.
-        </motion.p>
+        </p>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1 }}
-        >
+        <div className="reveal active delay-1000">
           <Button onClick={scrollToForm} className="shadow-[0_4px_20px_-5px_rgba(229,231,235,0.1)] hover:shadow-[0_4px_30px_-5px_rgba(229,231,235,0.25)] transition-all duration-700 text-black w-full md:w-auto transform-gpu tracking-[0.2em]">
             SOLICITAR ORÇAMENTO PREMIUM
           </Button>
-        </motion.div>
+        </div>
 
-      </motion.div>
+      </div>
     </section>
   );
 };

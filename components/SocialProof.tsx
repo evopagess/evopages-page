@@ -29,15 +29,7 @@ export const SocialProof: React.FC = () => {
       </div>
 
       <div className="flex relative w-full overflow-hidden">
-        <motion.div
-          className="flex gap-16 md:gap-24 items-center whitespace-nowrap"
-          animate={{ x: "-50%" }}
-          transition={{
-            repeat: Infinity,
-            ease: "linear",
-            duration: 30, // Adjust speed here
-          }}
-        >
+        <div className="flex gap-16 md:gap-24 items-center whitespace-nowrap animate-scroll will-change-transform">
           {duplicatedLogos.map((logo, index) => (
             <div
               key={index}
@@ -46,7 +38,7 @@ export const SocialProof: React.FC = () => {
               {logo}
             </div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );
