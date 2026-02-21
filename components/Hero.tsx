@@ -10,34 +10,29 @@ export const Hero: React.FC = () => {
   const parallaxContentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Definitive Desktop Parallax Logic
+    // Definitive Parallax Implementation
     let ticking = false;
 
-    // Initial position to avoid jumps
-    if (parallaxBgRef.current) parallaxBgRef.current.style.transform = 'translate3d(0, 0, 0) scale(1.2)';
-    if (parallaxContentRef.current) parallaxContentRef.current.style.transform = 'translate3d(0, 0, 0)';
+    const bg = parallaxBgRef.current;
+    const content = parallaxContentRef.current;
 
-    const handleScroll = () => {
+    // Safety check for mount
+    if (bg) bg.style.transform = 'translate3d(0,0,0) scale(1.5)';
+    if (content) content.style.transform = 'translate3d(0,0,0)';
+
+    const onScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          const section = containerRef.current;
-          if (!section) return;
-
-          // Only run on non-tiny screens
-          if (window.innerWidth >= 768) {
-            const rect = section.getBoundingClientRect();
-            const scrolledPercentage = Math.max(0, -rect.top / rect.height);
-
-            // Move background down as we scroll (0.4 coefficient for "deep" depth)
-            if (parallaxBgRef.current) {
-              const y = scrolledPercentage * 400; // Background moves down
-              parallaxBgRef.current.style.transform = `translate3d(0, ${y}px, 0) scale(1.2)`;
+          const scrolled = window.scrollY;
+          // Performance: only run if the hero is visible (approx first 1000px)
+          if (scrolled < 1200 && window.innerWidth >= 768) {
+            if (bg) {
+              // Background moves down relative to scroll speed (0.5 factor)
+              bg.style.transform = `translate3d(0, ${scrolled * 0.5}px, 0) scale(1.5)`;
             }
-
-            // Move content up slightly as we scroll (-0.15 coefficient for layering)
-            if (parallaxContentRef.current) {
-              const y = scrolledPercentage * -150; // Content moves up
-              parallaxContentRef.current.style.transform = `translate3d(0, ${y}px, 0)`;
+            if (content) {
+              // Content moves up slightly (-0.15 factor)
+              content.style.transform = `translate3d(0, ${scrolled * -0.15}px, 0)`;
             }
           }
           ticking = false;
@@ -46,11 +41,8 @@ export const Hero: React.FC = () => {
       }
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    // Run once on load
-    handleScroll();
-
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   useEffect(() => {
@@ -175,13 +167,17 @@ export const Hero: React.FC = () => {
   };
 
   return (
-    <section ref={containerRef} className="relative min-h-[110vh] flex flex-col justify-center items-center pt-24 pb-12 overflow-hidden bg-black selection:bg-white/30">
+    <section
+      ref={containerRef}
+      className="relative min-h-[110vh] flex flex-col justify-center items-center pt-24 pb-12 overflow-hidden bg-black selection:bg-white/30"
+      style={{ transformStyle: 'preserve-3d' }}
+    >
 
       {/* Background Asset - Modern Silver/Dark Metallic CSS */}
       <div
         ref={parallaxBgRef}
-        className="absolute inset-0 z-0 bg-zinc-950 pointer-events-none will-change-transform"
-        style={{ transform: 'translate3d(0,0,0) scale(1.2)' }}
+        className="absolute inset-0 z-0 bg-zinc-950 pointer-events-none"
+        style={{ transform: 'translate3d(0,0,0) scale(1.5)', willChange: 'transform' }}
       >
 
         {/* Base Darkness Layers */}
